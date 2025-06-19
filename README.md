@@ -1,6 +1,6 @@
 # OTK
 
-# 📸 OTK - 스마트 스크린샷 정보 정리 및 추천 앱
+## 📸 OTK - 스마트 스크린샷 정보 정리 및 추천 앱
 
 AI가 자동으로 스크린샷 정보를 분석·분류하고, 위치·시간·일정 기반으로 알림과 추천을 제공하는 **iOS 기반 개인화 정보 관리 플랫폼**입니다.
 
@@ -21,77 +21,61 @@ AI가 자동으로 스크린샷 정보를 분석·분류하고, 위치·시간·
 
 ## ⚙️ 기술 스택
 
-| 구성 요소        | 기술 스택 |
-|------------------|--------------------|
-| **Mobile Frontend** | Swift, SwiftUI |
-| **Backend** | Spring Boot, Firebase Functions |
-| **OCR & 객체 인식** | VisionKit (iOS), YOLOv8 |
-| **텍스트 의미 분석** | OpenAI GPT-4 API |
-| **위치 데이터** | CoreLocation |
-| **시간대 분석** | ScreenTime API |
-| **일정 연동** | EventKit |
-| **AI 추천** | PyTorch (Clustering, LSTM) |
-| **Storage** | Firebase Firestore (메타데이터 저장 전용) |
-
----
-
-
-## 📁 폴더 구조
-OTKApp/
-├── Modules/
-│   ├── GPTCategory/      # OCR + GPT 분류 모듈
-│   ├── CoreLocation/     # 위치 정보 수집 및 추천 조건 설정
-│   ├── Calendar/         # EventKit 일정 연동 모듈
-│   ├── UsageLogger/      # ScreenTime 기반 사용 패턴 분석
-├── Shared/               # 공통 유틸리티, 모델 등
-├── Resources/            # 이미지, 테스트 데이터 등
-└── OTKApp.swift          # App entry point
+| 구성 요소              | 기술 스택                         |
+|------------------------|------------------------------------|
+| **Mobile Frontend**    | Swift, SwiftUI                    |
+| **Backend**            | Firebase Functions, Spring Boot  |
+| **OCR & 객체 인식**     | VisionKit (iOS), YOLOv8           |
+| **텍스트 의미 분석**    | OpenAI GPT-4 API                  |
+| **위치 데이터**         | CoreLocation                      |
+| **사용 패턴 분석**      | UsageLogger (ScreenTime 대체)     |
+| **일정 연동**           | EventKit                          |
+| **AI 추천**            | PyTorch (Clustering, LSTM)       |
+| **Storage**            | Firebase Firestore                |
 
 ---
 
 ## 🔍 주요 기능
 
-### ✅ 정보 추출 및 분류
-- **VisionKit**: 스크린샷에서 텍스트 OCR
-- **YOLOv8**: 쿠폰/지도 등 시각 객체 탐지
-- **GPT-4 API**: 텍스트 + 객체 정보를 의미 기반으로 자동 분류 및 태깅
-
-### ✅ 메타데이터 저장
-- **Spring**: GPT 결과 정제 및 Firebase 연동
-- **Firestore**: 카테고리, 태그, 유효기간, 위치 정보 저장 (이미지 제외)
+### ✅ 스크린샷 정보 추출 및 자동 분류
+- **VisionKit**: 이미지 내 텍스트 OCR
+- **YOLOv8**: 쿠폰/지도 등 시각 정보 보완 탐지
+- **GPT-4 API**: 의미 기반 카테고리 분류 및 태깅
 
 ### ✅ 개인화 추천
-- **CoreLocation**: 위치 기반 추천
-- **ScreenTime**: 시간대별 알림 타이밍 분석
-- **EventKit**: 일정 연동 알림 제공
-- **PyTorch**: Clustering + LSTM 기반 사용자 행동 예측
+- **CoreLocation**: 주변 장소 기반 추천 (예: 카페 쿠폰)
+- **UsageLogger**: 시간대별 사용 패턴 분석 및 알림 타이밍 최적화
+- **EventKit**: 일정 전후 맥락 기반 추천 제공
+- **PyTorch 기반 모델**:
+  - 사용자 Clustering (예: ‘주말 외출형’)
+  - LSTM 기반 Sequence Modeling (관심사 흐름 예측)
 
----
-
-## 🚀 실행 방법
-
-1. 본 레포를 클론
-2.	Xcode로 OTKApp.xcodeproj 또는 OTKApp.xcworkspace 열기
-3.	.env 또는 Info.plist에 API Key 설정
-   OPENAI_API_KEY=your_api_key
-4. iOS 시뮬레이터 또는 실기기에서 실행
-
----
-
-## 🧪 테스트 시나리오
-
-- 앱 실행 후 스크린샷 업로드
-- VisionKit OCR 결과 → GPT-4 분류 확인
-- Firebase Firestore에 태그/카테고리/위치 메타데이터 저장 확인
-- 위치 이동/시간대 변화 시 맞춤형 추천 카드 또는 알림 노출 확인
+### ✅ 메타데이터 중심 저장 구조
+- OCR/GPT 분석 결과는 메타데이터화하여 Firestore에 저장  
+- 위치·시간·일정 데이터는 **실시간 분석 후 즉시 폐기**
 
 ---
 
 ## 🎞 시연 영상
 
-🖥 [YouTube 시연 영상 바로가기](https://www.youtube.com/shorts/oHB4caPoAj0)
+🖥 [YouTube 시연 영상 바로가기](https://youtube.com/shorts/UFNt7KPRllA?feature=share)
 
-> OCR → GPT 분류 → Firebase 저장 → CoreLocation 기반 추천 → UI 반영까지 전체 흐름을 시각적으로 확인할 수 있습니다.
+### ▶️ 시청 포인트
+- 스크린샷 선택 → VisionKit 기반 OCR
+- GPT-4를 통한 의미 기반 분류 및 세부 정보 추출
+- UI 내 개별 필드 시각화: 식당/카페 이름, 주소, 메뉴 등
+- CoreLocation 기반 위치 추천 카드 노출
+- Firebase 메타데이터 저장 흐름까지 확인 가능  
+- 각 단계별 처리 기술 자막 삽입으로 직관적인 흐름 제공
+
+---
+
+## 🚀 실행 방법
+
+1. 본 레포지토리 클론
+2. `OTKApp.xcodeproj` 또는 `OTKApp.xcworkspace` 열기
+3. `.env` 또는 `Info.plist`에 아래와 같이 API 키 설정
+4. iOS 시뮬레이터 또는 실기기에서 실행
 
 ---
 
@@ -99,6 +83,10 @@ OTKApp/
 
 **Team 강배우**
 
-- 강다혜 (팀장, Backend & AI)
-- 배서연 (Backend & AI)
-- 우민하 (Frontend, UI/UX)
+- 👩‍💻 강다혜 (팀장, Backend & AI)
+- 👩‍💻 배서연 (Backend & AI)
+- 👩‍🎨 우민하 (Frontend, UI/UX)
+
+---
+
+📝 **📁 폴더 구조 설명은 추후 추가 예정입니다.**
